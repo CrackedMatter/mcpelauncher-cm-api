@@ -20,7 +20,7 @@ namespace cm {
         failed_to_read_section_header_string_table,
     };
 
-    struct shared_object::impl {
+    struct shared_object_impl {
         void* native_handle{};
 
         std::byte* base_address{};
@@ -31,6 +31,8 @@ namespace cm {
 
         auto parse_elf_file() -> std::expected<void, parse_elf_file_error>;
     };
+
+    struct shared_object::impl : shared_object_impl {};
 
     shared_object::shared_object(void* handle) : p_impl{new impl{handle}, [](impl* p) { delete p; }} {
         dl_iterate_phdr(
@@ -69,7 +71,7 @@ namespace cm {
         return it->second;
     }
 
-    std::expected<void, parse_elf_file_error> shared_object::impl::parse_elf_file() {
+    std::expected<void, parse_elf_file_error> shared_object_impl::parse_elf_file() {
         std::ifstream file{this->file_path, std::ios::binary};
         if (!file)
             return std::unexpected{parse_elf_file_error::failed_to_open_file};
