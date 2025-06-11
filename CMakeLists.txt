@@ -1,10 +1,8 @@
-cmake_minimum_required(VERSION 3.14...3.31)
+cmake_minimum_required(VERSION 3.20...3.31)
 
 project(mcpelauncher_cm_api LANGUAGES C CXX ASM)
 
 option(CM_API_BUILD_SHARED_LIB "Build shared library" ${PROJECT_IS_TOP_LEVEL})
-
-set(CMAKE_CXX_STANDARD 23)
 
 set(CPM_SOURCE_CACHE ${PROJECT_SOURCE_DIR}/cpm-cache CACHE PATH "")
 include(cmake/CPM.cmake)
@@ -34,6 +32,8 @@ if(CM_API_BUILD_SHARED_LIB)
         src/shared_object.cpp
         src/string_hash.hpp
     )
+
+    target_compile_features(mcpelauncher_cm_api PRIVATE cxx_std_23)
 
     target_include_directories(mcpelauncher_cm_api PRIVATE include)
 
