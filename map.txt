@@ -1,0 +1,10 @@
+LIBMCPELAUNCHER_CM_API {
+  global:
+    mod_init;
+    mod_preinit;
+    extern "C++" {
+      cm::api::*;
+    };
+  local:
+    *;
+};

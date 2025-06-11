@@ -1,0 +1,11 @@
+BasedOnStyle: LLVM
+AccessModifierOffset: -4
+AlignConsecutiveAssignments: Consecutive
+AlignConsecutiveDeclarations: Consecutive
+BreakBeforeBinaryOperators: NonAssignment
+ColumnLimit: 0
+FixNamespaceComments: false
+IndentWidth: 4
+NamespaceIndentation: All
+PointerAlignment: Left
+SpaceAfterTemplateKeyword: false
