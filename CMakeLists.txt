@@ -23,6 +23,8 @@ add_library(mcpelauncher_cm_api_import STATIC
     ${CMAKE_CURRENT_BINARY_DIR}/mcpelauncher_cm_api.tramp.S
 )
 
+target_compile_features(mcpelauncher_cm_api_import PUBLIC cxx_std_23)
+
 target_include_directories(mcpelauncher_cm_api_import PUBLIC include)
 
 if(CM_API_BUILD_SHARED_LIB)
