@@ -52,6 +52,15 @@ namespace cm {
         }
     }
 
+    shared_object::shared_object(const self_t& caller)
+        : shared_object{[&] {
+              Dl_info info;
+              dladdr(&caller, &info);
+              auto handle = dlopen(info.dli_fname, 0);
+              dlclose(handle);
+              return handle;
+          }()} {}
+
     void* shared_object::get_native_handle() const {
         return p_impl->native_handle;
     }
@@ -69,6 +78,11 @@ namespace cm {
         if (it == p_impl->section_ranges.end())
             return std::nullopt;
         return it->second;
+    }
+
+    std::vector<std::byte>& shared_object::get_persistent_data() const {
+        static unordered_string_map<std::vector<std::byte>> data{};
+        return data[p_impl->file_path];
     }
 
     std::expected<void, parse_elf_file_error> shared_object_impl::parse_elf_file() {
