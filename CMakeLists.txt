@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.20...3.31)
 project(mcpelauncher_cm_api LANGUAGES C CXX ASM)
 
 option(CM_API_BUILD_SHARED_LIB "Build shared library" ${PROJECT_IS_TOP_LEVEL})
+option(CM_API_BUILD_EXAMPLE "Build example mod" OFF)
+option(CM_API_INSTALL_EXAMPLE "Install example mod" OFF)
 
 set(CPM_SOURCE_CACHE ${PROJECT_SOURCE_DIR}/cpm-cache CACHE PATH "")
 include(cmake/CPM.cmake)
@@ -58,4 +60,8 @@ if(CM_API_BUILD_SHARED_LIB)
     endif()
 
     install(TARGETS mcpelauncher_cm_api LIBRARY DESTINATION mods)
+endif()
+
+if(CM_API_BUILD_EXAMPLE)
+    add_subdirectory(example)
 endif()
