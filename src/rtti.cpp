@@ -52,17 +52,33 @@ namespace cm {
     }
 
     std::expected<std::vector<void*>, find_vtable_error> api::find_all_vtables(std::span<std::byte> rodata, std::span<std::byte> data_rel_ro, std::string_view name) {
+        struct vtables_insert_iterator {
+            using difference_type = std::ptrdiff_t;
+
+            std::vector<void*>* container;
+
+            constexpr vtables_insert_iterator& operator=(hat::scan_result value) {
+                container->push_back(value.get() + sizeof(void*));
+                return *this;
+            }
+
+            constexpr vtables_insert_iterator& operator*() { return *this; }
+            constexpr vtables_insert_iterator& operator++() { return *this; }
+            constexpr vtables_insert_iterator& operator++(int) { return *this; }
+        };
+
+        std::expected<std::vector<void*>, find_vtable_error> result;
+
         auto typeinfo = find_typeinfo(rodata, data_rel_ro, name);
-        if (!typeinfo.has_value())
-            return std::unexpected{typeinfo.error()};
+        if (!typeinfo.has_value()) {
+            result = std::unexpected{typeinfo.error()};
+            return result;
+        }
 
-        auto vtables = hat::find_all_pattern(data_rel_ro, hat::object_to_signature(*typeinfo));
-        if (vtables.empty())
-            return std::unexpected{find_vtable_error::vtable};
+        if (hat::find_all_pattern(data_rel_ro, vtables_insert_iterator{&*result}, hat::object_to_signature(*typeinfo)) == 0)
+            result = std::unexpected{find_vtable_error::vtable};
 
-        return vtables
-               | std::views::transform([](auto& r) { return r.get() + sizeof(void*); })
-               | std::ranges::to<std::vector<void*>>();
+        return result;
     }
 
     std::expected<std::vector<void*>, find_vtable_error> api::find_all_vtables(const shared_object& object, std::string_view name) {
