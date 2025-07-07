@@ -39,7 +39,7 @@ if(CM_API_BUILD_SHARED_LIB)
 
     target_include_directories(mcpelauncher_cm_api PRIVATE include)
 
-    CPMAddPackage("gh:BasedInc/libhat@0.5.0")
+    CPMAddPackage("gh:BasedInc/libhat@0.6.0")
     target_link_libraries(mcpelauncher_cm_api PRIVATE libhat::libhat)
 
     target_compile_options(mcpelauncher_cm_api PRIVATE -Wall -Wextra -Wconversion -Wpedantic)
