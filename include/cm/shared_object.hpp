@@ -36,6 +36,8 @@ namespace cm::inline api {
 
         [[nodiscard]] auto get_persistent_data() const -> std::vector<std::byte>&;
 
+        [[noreturn]] void exit_thread_and_reload() const;
+
     private:
         struct impl;
 

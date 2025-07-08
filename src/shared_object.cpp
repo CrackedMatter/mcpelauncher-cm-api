@@ -7,7 +7,9 @@
 #include <filesystem>
 #include <fstream>
 #include <link.h>
+#include <pthread.h>
 #include <string>
+#include <thread>
 #include <utility>
 #include <vector>
 
@@ -83,6 +85,16 @@ namespace cm {
     std::vector<std::byte>& shared_object::get_persistent_data() const {
         static unordered_string_map<std::vector<std::byte>> data{};
         return data[p_impl->file_path];
+    }
+
+    void shared_object::exit_thread_and_reload() const {
+        std::thread{[thread = pthread_self(), handle = p_impl->native_handle, path = p_impl->file_path] {
+            pthread_join(thread, nullptr);
+            dlclose(handle);
+            dlopen(path.c_str(), 0);
+        }}.detach();
+
+        pthread_exit(nullptr);
     }
 
     std::expected<void, parse_elf_file_error> shared_object_impl::parse_elf_file() {
