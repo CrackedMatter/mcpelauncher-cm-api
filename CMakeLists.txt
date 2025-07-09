@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.20...3.31)
 project(mcpelauncher_cm_api LANGUAGES C CXX ASM)
 
 option(CM_API_BUILD_SHARED_LIB "Build shared library" ${PROJECT_IS_TOP_LEVEL})
+option(CM_API_INSTALL_SHARED_LIB "Install shared library" ON)
 option(CM_API_BUILD_EXAMPLE "Build example mod" OFF)
 option(CM_API_INSTALL_EXAMPLE "Install example mod" OFF)
 
@@ -59,7 +60,9 @@ if(CM_API_BUILD_SHARED_LIB)
         target_link_options(mcpelauncher_cm_api PRIVATE -flto)
     endif()
 
-    install(TARGETS mcpelauncher_cm_api LIBRARY DESTINATION mods)
+    if(CM_API_INSTALL_SHARED_LIB)
+        install(TARGETS mcpelauncher_cm_api LIBRARY DESTINATION mods)
+    endif()
 endif()
 
 if(CM_API_BUILD_EXAMPLE)
