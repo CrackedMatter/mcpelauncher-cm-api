@@ -1,3 +1,5 @@
-extern "C" void mod_preinit() {}
+namespace cm {
+    extern "C" void mod_preinit() {}
 
-extern "C" void mod_init() {}
+    extern "C" void mod_init() {}
+}
