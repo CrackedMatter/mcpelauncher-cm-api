@@ -1,6 +1,5 @@
 #pragma once
 
-#include "shared_object.hpp"
 #include <cstddef>
 #include <expected>
 #include <span>
@@ -8,6 +7,8 @@
 #include <vector>
 
 namespace cm::inline api {
+    struct shared_object;
+
     enum class find_vtable_error {
         section,
         typeinfo_name,
