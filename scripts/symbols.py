@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import sys
+import os, sys
 
 from elftools.elf.elffile import ELFFile
 
@@ -21,7 +21,7 @@ symbols.sort()
 symbols.remove('mod_init')
 symbols.remove('mod_preinit')
 
-print('LIBRARY ' + sys.argv[1].split('/')[-1])
+print('LIBRARY ' + os.path.basename(sys.argv[1]))
 print('EXPORTS')
 for sym in symbols:
     print('  ' + sym)
